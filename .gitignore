@@ -4,33 +4,55 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
 build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
 *.egg-info/
 .installed.cfg
 *.egg
 
-# Environment variables
-.env
-.venv
+# Virtual Environment
+.venv/
 venv/
+env/
 ENV/
 
+# Environment variables
+.env
+
 # IDE
-.idea/
 .vscode/
+.idea/
 *.swp
 *.swo
 
-# Logs
+# Logs and databases
 *.log
+*.sqlite
+*.sqlite3
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Ruff linter cache
+.ruff_cache/
+
+# LangGraph API local state
+.langgraph_api/

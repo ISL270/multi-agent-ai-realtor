@@ -1,0 +1,8 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "agent": "src/real_estate_ai/real_estate_agent.py:graph"
+  },
+  "env": ".env",
+  "image_distro": "wolfi"
+}
