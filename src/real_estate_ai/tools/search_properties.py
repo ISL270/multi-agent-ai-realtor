@@ -37,8 +37,8 @@ def _get_property_images(property_ids: List[str]) -> Dict[str, List[Dict[str, An
         return {}
 
 
-def _map_to_property(prop: Dict[str, Any], images: List[Dict[str, Any]]) -> Property:
-    """Map database property to Property model."""
+def _map_to_property(prop: Dict[str, Any], images: List[Dict[str, Any]], amenities: List[str]) -> Property:
+    """Map database property to Property model, including amenities."""
     return Property(
         id=prop["id"],
         title=prop.get("title", "Untitled Property"),
@@ -50,6 +50,7 @@ def _map_to_property(prop: Dict[str, Any], images: List[Dict[str, Any]]) -> Prop
         city=prop.get("city"),
         area_sqm=float(prop.get("area_sqm", 0)) if prop.get("area_sqm") is not None else None,
         images=images or [],
+        amenities=amenities or [],
     )
 
 
@@ -100,8 +101,15 @@ def search_properties(filters: PropertySearchFilters) -> List[Property]:
         property_ids = [prop["id"] for prop in response.data]
         property_images = _get_property_images(property_ids)
 
-        # Map DB rows to models
-        return [_map_to_property(prop, property_images.get(prop["id"], [])) for prop in response.data]
+        # Map DB rows to models, using amenities directly from the RPC result
+        return [
+            _map_to_property(
+                prop,
+                property_images.get(prop["id"], []),
+                prop.get("amenities", [])
+            )
+            for prop in response.data
+        ]
     except Exception as e:
         logger.error(f"Error searching properties: {str(e)}", exc_info=True)
         return []
