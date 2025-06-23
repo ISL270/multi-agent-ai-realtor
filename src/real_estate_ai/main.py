@@ -1,28 +1,32 @@
 import os
 
 from dotenv import load_dotenv
-from langgraph.graph import MessagesState, StateGraph
+from langgraph.graph import StateGraph
 from langgraph.prebuilt import create_react_agent
+from langgraph.prebuilt.chat_agent_executor import AgentState
 
 from real_estate_ai.tools import parse_property_search_query, search_properties
 
-# Explicitly load .env from project root
+# Explicitly load .env from project root (ensures environment variables are available for local/dev runs)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 load_dotenv(dotenv_path=os.path.join(PROJECT_ROOT, ".env"))
 
+# Validate that the OpenAI API key is available (required for model access)
 if not os.getenv("OPENAI_API_KEY"):
     raise RuntimeError("OPENAI_API_KEY not set in environment or .env file.")
 
 
-class CustomState(MessagesState):
+class State(AgentState):
     pass
 
 
-graph_builder = StateGraph(CustomState)
+# Build the agent graph using LangGraph's StateGraph
+# The agent node is created with a custom prompt and attached tools for property search and query parsing
+graph_builder = StateGraph(State)
 
 agent = create_react_agent(
     model="gpt-4.1",
-    prompt="I'm an AI assistant for real estate agents. I can help you search for properties and answer questions about them. Please give me a command to search for properties or ask a question about a specific property.",
+    prompt="You are a helpful real estate agent assistant. You can help users search for properties and answer questions about them.",
     tools=[parse_property_search_query, search_properties],
 )
 
