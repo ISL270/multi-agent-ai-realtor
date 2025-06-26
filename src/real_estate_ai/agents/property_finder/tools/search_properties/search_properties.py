@@ -3,9 +3,10 @@ from typing import Any, Dict, List
 
 from langchain.tools import tool
 
-from real_estate_ai.models.property import Property
-from real_estate_ai.models.property_search_filters import PropertySearchFilters
-from real_estate_ai.utils.supabase import supabase
+from real_estate_ai.supabase import supabase
+
+from ..parse_property_search_query.property_search_filters import PropertySearchFilters
+from .property import Property
 
 logger = logging.getLogger(__name__)
 
@@ -103,11 +104,7 @@ def search_properties(filters: PropertySearchFilters) -> List[Property]:
 
         # Map DB rows to models, using amenities directly from the RPC result
         return [
-            _map_to_property(
-                prop,
-                property_images.get(prop["id"], []),
-                prop.get("amenities", [])
-            )
+            _map_to_property(prop, property_images.get(prop["id"], []), prop.get("amenities", []))
             for prop in response.data
         ]
     except Exception as e:

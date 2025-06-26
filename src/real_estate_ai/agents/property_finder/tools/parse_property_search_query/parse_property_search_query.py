@@ -2,7 +2,7 @@ from langchain.chat_models import init_chat_model
 from langchain.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from real_estate_ai.models.property_search_filters import PropertySearchFilters
+from .property_search_filters import PropertySearchFilters
 
 
 @tool(parse_docstring=True)
