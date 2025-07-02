@@ -56,3 +56,5 @@ Thumbs.db
 
 # LangGraph API local state
 .langgraph_api/
+service_account.json
+.env
