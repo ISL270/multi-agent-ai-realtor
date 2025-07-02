@@ -13,6 +13,7 @@ class UserProfile(BaseModel):
     """
 
     name: Optional[str] = None
+    phone_number: Optional[str] = Field(None, description="The user's phone number.")
     job: Optional[str] = None
     num_of_children: Optional[int] = None
     city_of_residence: Optional[str] = None

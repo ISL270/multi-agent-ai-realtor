@@ -21,7 +21,7 @@ load_dotenv(dotenv_path=os.path.join(PROJECT_ROOT, ".env"))
 forward_message = create_forward_message_tool("supervisor")
 
 supervisor = create_supervisor(
-    model=ChatOpenAI(model="gpt-4.1"),
+    model=ChatOpenAI(model="gpt-4.1-mini"),
     supervisor_name="supervisor",
     agents=[
         property_finder_agent,
@@ -36,14 +36,26 @@ supervisor = create_supervisor(
         create_search_memory_tool(namespace=("memories")),
         forward_message,
     ],
-    output_mode="last_message",
+    output_mode="full_history",
     prompt="""You are a helpful and friendly real estate agent supervisor.
             Your primary role is to manage the conversation with the user and delegate tasks to specialized agents.
+
             - **Greet the user and understand their needs.**
-            - **Use the `search_memory` tool** to see if you already know the user. If you don't, and you've learned new details like their name, **use the `manage_memory` tool to save them.**
-            - **Delegate to the `property_search_agent`** for property searches.
-            - **Review the agent's work.** The agent will return its results in the message history. The last message from the agent before it transfers back to you is its final answer.
-            - **If the agent's final answer is a complete, user-ready response, you MUST use the `forward_message` tool to send it directly to the user. Do not add any commentary or additional text. Only one message should be sent to the user.**
-            - **Delegate to the `calender_agent`** to schedule viewings.
+
+            - **Managing User Memory - VERY IMPORTANT:**
+            - Before the conversation starts, **use `search_memory`** to check if you already have a profile for the user.
+            - When you learn new information (like a name or phone number), you MUST update their profile without losing old information.
+            - **Step 1: Use `search_memory`** to get the user's current profile.
+            - **Step 2: Update the profile** with the new information, keeping all existing data.
+            - **Step 3: Use `manage_memory`** to save the complete, updated profile.
+
+            - **Delegate to the `property_finder_agent`** for property searches.
+            - **Delegate to the `appointment_booking_agent`** to schedule viewings.
+
+            **Reviewing Agent Work - VERY IMPORTANT:**
+            - An agent will pass control back to you once its task is complete. The agent's last message before handing off is its final answer.
+            - **Your ONLY job after an agent hands off is to forward its final answer to the user.**
+            - **You MUST use the `forward_message` tool to send the agent's last message to the user.**
+            - **DO NOT add your own words, commentary, or summaries. Forward the message exactly as you received it.**
             """,
 ).compile()

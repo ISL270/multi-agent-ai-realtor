@@ -15,7 +15,7 @@ def parse_property_search_query(user_query: str) -> PropertySearchFilters:
     """
     system_prompt = (
         "You are a helpful assistant that extracts structured search filters from real estate search queries. "
-        "Given a user request, return a JSON object with as many of these fields as possible: "
+        "Given a user request, return a `PropertySearchFilters` object with as many of these fields as possible: "
         "city (str), max_price (float), min_price (float), bedrooms (int), bathrooms (int), "
         "property_type (str), amenities (list of str), min_area (float), max_area (float), listing_date (str), "
         "sort_by (str: 'price' or 'area'), sort_order (str: 'asc' or 'desc'). "
@@ -24,7 +24,7 @@ def parse_property_search_query(user_query: str) -> PropertySearchFilters:
         "If a field is missing, omit it from the output."
     )
     llm = init_chat_model(
-        "openai:gpt-4o",
+        "openai:gpt-4.1",
         temperature=0,
     )
     structured_llm = llm.with_structured_output(PropertySearchFilters)
