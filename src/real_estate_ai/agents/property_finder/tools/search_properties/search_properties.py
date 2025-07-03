@@ -11,35 +11,13 @@ from .property import Property
 logger = logging.getLogger(__name__)
 
 
-def _get_property_images(property_ids: List[str]) -> Dict[str, List[Dict[str, Any]]]:
-    """Fetch images for multiple properties in a single query."""
-    if not property_ids:
-        return {}
 
-    try:
-        response = (
-            supabase.table("property_images")
-            .select("property_id, url, is_primary")
-            .in_("property_id", property_ids)
-            .limit(500)
-            .execute()
-        )
-
-        images = {}
-        data = response.data or []
-
-        for img in data:
-            images.setdefault(img["property_id"], []).append(
-                {"url": img["url"], "is_primary": img.get("is_primary", False)}
-            )
-        return images
-    except Exception as e:
-        logger.error(f"Error fetching property images: {str(e)}", exc_info=True)
-        return {}
-
-
-def _map_to_property(prop: Dict[str, Any], images: List[Dict[str, Any]], amenities: List[str]) -> Property:
-    """Map database property to Property model, including amenities."""
+def _map_to_property(prop: Dict[str, Any], amenities: List[str]) -> Property:
+    """
+    Map a database property row to the Property model, including amenities.
+    Expects prop to already have an 'image_url' field (non-optional).
+    # Reason: The schema now guarantees a single image_url per property.
+    """
     return Property(
         id=prop["id"],
         title=prop.get("title", "Untitled Property"),
@@ -50,7 +28,7 @@ def _map_to_property(prop: Dict[str, Any], images: List[Dict[str, Any]], ameniti
         bathrooms=prop.get("bathrooms"),
         city=prop.get("city"),
         area_sqm=float(prop.get("area_sqm", 0)) if prop.get("area_sqm") is not None else None,
-        images=images or [],
+        image_url=prop["image_url"],
         amenities=amenities or [],
     )
 
@@ -98,13 +76,9 @@ def search_properties(filters: PropertySearchFilters) -> List[Property]:
         if not response.data:
             return []
 
-        # Fetch images for returned properties
-        property_ids = [prop["id"] for prop in response.data]
-        property_images = _get_property_images(property_ids)
-
         # Map DB rows to models, using amenities directly from the RPC result
         return [
-            _map_to_property(prop, property_images.get(prop["id"], []), prop.get("amenities", []))
+            _map_to_property(prop, prop.get("amenities", []))
             for prop in response.data
         ]
     except Exception as e:
