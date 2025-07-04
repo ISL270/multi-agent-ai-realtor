@@ -17,3 +17,4 @@ class Property(BaseModel):
     area_sqm: Optional[float]
     image_url: str  # Non-optional. Always a valid image URL for this property.
     amenities: List[str] = []
+

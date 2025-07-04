@@ -58,3 +58,6 @@ Thumbs.db
 .langgraph_api/
 service_account.json
 .env
+
+# Frontend
+src/real_estate_ai/frontend/node_modules/

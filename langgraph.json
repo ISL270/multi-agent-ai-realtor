@@ -1,7 +1,10 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "agent": "src/real_estate_ai/main.py:supervisor"
+    "agent": "real_estate_ai.main:supervisor"
+  },
+  "ui": {
+    "agent": "src/real_estate_ai/frontend/ui.tsx"
   },
   "env": ".env",
   "image_distro": "wolfi"
