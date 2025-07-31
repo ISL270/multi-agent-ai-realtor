@@ -5,10 +5,9 @@ from typing import Any, Dict, List
 from langchain_core.messages import AIMessage
 from langgraph.graph.ui import push_ui_message
 
-from src.real_estate_ai.standard_state import StandardState
-
-from ....utils.supabase import supabase
-from .property import Property
+from agents.property_finder.query_supabase.property import Property
+from standard_state import StandardState
+from utils.supabase import supabase
 
 logger = logging.getLogger(__name__)
 
@@ -26,8 +25,6 @@ def query_supabase_node(state: StandardState):
     if not filters:
         logger.warning("No filters found in state, returning empty list.")
         return {"properties": []}
-    
-
 
     try:
         # Validate and normalize input
@@ -53,7 +50,7 @@ def query_supabase_node(state: StandardState):
         # Remove None values to use DB defaults, but always keep at least one parameter
         # to disambiguate between multiple RPC function signatures
         params = {k: v for k, v in params.items() if v is not None}
-        
+
         # Ensure we always have at least one parameter to avoid function ambiguity
         if not params:
             params = {"p_city": None}

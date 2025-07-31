@@ -1,9 +1,10 @@
 from langgraph.graph import StateGraph
 
-from src.real_estate_ai.standard_state import StandardState
-
-from .parse_query.parse_query_node import parse_query_node
-from .query_supabase.query_supabase_node import query_supabase_node
+from agents.property_finder.parse_query.parse_query_node import parse_query_node
+from agents.property_finder.query_supabase.query_supabase_node import (
+    query_supabase_node,
+)
+from standard_state import StandardState
 
 workflow = StateGraph(StandardState).add_sequence(
     [

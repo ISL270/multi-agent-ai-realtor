@@ -5,9 +5,9 @@ import logging
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from src.real_estate_ai.standard_state import StandardState
+from standard_state import StandardState
 
-from .property_search_filters import PropertySearchFilters
+from agents.property_finder.parse_query.property_search_filters import PropertySearchFilters
 
 logger = logging.getLogger(__name__)
 

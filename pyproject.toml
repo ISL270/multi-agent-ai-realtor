@@ -2,15 +2,13 @@
 name = "real_estate_ai"
 version = "0.1.0"
 description = "AI agent for real estate property inquiries in Egypt"
-authors = [
-    {name = "Your Name", email = "your.email@example.com"},
-]
 requires-python = ">=3.10"
 dependencies = [
     "langchain>=0.3.0",
     "langchain-openai>=0.2.0",
     "langchain-community>=0.3.0",
     "langgraph>=0.2.0",
+    "langgraph-supervisor",
     "supabase>=2.0.0",
     "python-dotenv>=1.0.0",
     "langmem>=0.0.27",

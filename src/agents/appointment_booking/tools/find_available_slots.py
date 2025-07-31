@@ -5,7 +5,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from googleapiclient.discovery import Resource
 from langchain_core.tools import tool
 
-from real_estate_ai.utils.google_calendar import get_calendar_service
+from utils.google_calendar import get_calendar_service
 
 
 @tool(parse_docstring=True)

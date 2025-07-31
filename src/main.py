@@ -6,12 +6,12 @@ from langgraph_supervisor import create_supervisor
 from langgraph_supervisor.handoff import create_forward_message_tool
 from langmem import create_manage_memory_tool, create_search_memory_tool
 
-from .agents.appointment_booking.appointment_booking_agent import (
+from agents.appointment_booking.appointment_booking_agent import (
     appointment_booking_agent,
 )
-from .agents.property_finder.property_finder import property_finder
-from .standard_state import StandardState
-from .user_profile import UserProfile
+from agents.property_finder.property_finder import property_finder
+from standard_state import StandardState
+from user_profile import UserProfile
 
 # Explicitly load .env from project root (ensures environment variables are available for local/dev runs)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))

@@ -2,10 +2,10 @@ from datetime import datetime
 
 from langgraph.prebuilt import create_react_agent
 
-from real_estate_ai.agents.appointment_booking.tools.find_available_slots import (
+from agents.appointment_booking.tools.find_available_slots import (
     find_available_slots,
 )
-from real_estate_ai.agents.appointment_booking.tools.schedule_viewing import (
+from agents.appointment_booking.tools.schedule_viewing import (
     schedule_viewing,
 )
 

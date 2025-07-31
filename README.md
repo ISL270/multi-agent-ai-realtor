@@ -36,7 +36,7 @@ Before running this project, make sure you have:
 
 3. **Install frontend dependencies:**
    ```bash
-   cd src/real_estate_ai/frontend
+   cd src/frontend
    npm install
    ```
 
@@ -86,29 +86,40 @@ Try these natural language queries in the chat interface:
 ```
 real_estate_ai/
 ├── src/
-│   └── real_estate_ai/
-│       ├── frontend/         # React UI components
-│       │   ├── ui.tsx       # Main property carousel component
-│       │   ├── ui.css       # Tailwind CSS source
-│       │   ├── output.css   # Compiled CSS (generated)
-│       │   ├── carousel.tsx # Carousel component
-│       │   ├── button.tsx   # Button component
-│       │   ├── utils.ts     # Utility functions
-│       │   ├── package.json # Frontend dependencies
-│       │   └── tailwind.config.js # Tailwind configuration
-│       ├── agents/          # LangGraph agent implementations
-│       │   ├── property_finder_agent.py
-│       │   └── appointment_booking_agent.py
-│       ├── tools/           # Agent tools
-│       │   └── property_search.py
-│       ├── models.py        # Pydantic data models
-│       ├── supabase.py      # Database client
-│       └── main.py          # Main supervisor agent
-├── .env                     # Environment variables
-├── .env.example             # Environment template
-├── langgraph.json           # LangGraph configuration
-├── pyproject.toml           # Python dependencies
-└── README.md                # This file
+│   ├── agents/                    # LangGraph agent implementations
+│   │   ├── appointment_booking/   # Appointment booking agent
+│   │   │   ├── tools/            # Booking-specific tools
+│   │   │   │   ├── find_available_slots.py
+│   │   │   │   └── schedule_viewing.py
+│   │   │   └── appointment_booking_agent.py
+│   │   └── property_finder/       # Property search agent
+│   │       ├── parse_query/      # Query parsing module
+│   │       │   ├── parse_query_node.py
+│   │       │   └── property_search_filters.py
+│   │       ├── query_supabase/   # Database query module
+│   │       │   ├── property.py
+│   │       │   └── query_supabase_node.py
+│   │       └── property_finder.py
+│   ├── frontend/                  # React UI components
+│   │   ├── ui.tsx                # Main property carousel component
+│   │   ├── ui.css                # Tailwind CSS source
+│   │   ├── output.css            # Compiled CSS (generated)
+│   │   ├── carousel.tsx          # Carousel component
+│   │   ├── button.tsx            # Button component
+│   │   ├── utils.ts              # Utility functions
+│   │   ├── package.json          # Frontend dependencies
+│   │   └── tailwind.config.js    # Tailwind configuration
+│   ├── utils/                     # Shared utilities
+│   │   ├── google_calendar.py    # Google Calendar integration
+│   │   └── supabase.py           # Database client
+│   ├── main.py                    # Main supervisor agent
+│   ├── standard_state.py          # Shared state definition
+│   └── user_profile.py            # User profile model
+├── .env                           # Environment variables
+├── .env.example                   # Environment template
+├── langgraph.json                 # LangGraph configuration
+├── pyproject.toml                 # Python dependencies
+└── README.md                      # This file
 ```
 
 ## Troubleshooting
@@ -116,7 +127,7 @@ real_estate_ai/
 ### Frontend CSS Not Loading
 If the UI doesn't look right, make sure you've built the CSS:
 ```bash
-cd src/real_estate_ai/frontend
+cd src/frontend
 npm run dev
 ```
 
@@ -137,7 +148,7 @@ If you get import errors:
 pip install -e .
 
 # Reinstall frontend dependencies
-cd src/real_estate_ai/frontend
+cd src/frontend
 npm install
 ```
 
@@ -158,10 +169,10 @@ Make sure your `.env` file contains all required variables:
 
 ### Adding New Features
 
-1. **New Agent**: Create in `src/real_estate_ai/agents/`
-2. **New Tool**: Add to `src/real_estate_ai/tools/`
-3. **New UI Component**: Add to `src/real_estate_ai/frontend/`
-4. **Database Changes**: Update `src/real_estate_ai/supabase.py`
+1. **New Agent**: Create in `src/agents/`
+2. **New Tool**: Add to `src/tools/`
+3. **New UI Component**: Add to `src/frontend/`
+4. **Database Changes**: Update `src/supabase.py`
 
 ## Contributing
 
