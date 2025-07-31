@@ -4,7 +4,7 @@
     "agent": "real_estate_ai.main:supervisor"
   },
   "ui": {
-    "agent": "src/real_estate_ai/frontend/ui.tsx"
+    "agent": "./src/real_estate_ai/frontend/ui.tsx"
   },
   "env": ".env",
   "image_distro": "wolfi"

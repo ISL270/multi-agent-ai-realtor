@@ -1,123 +1,81 @@
 import React from 'react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./carousel";
+import './output.css';
 
-// --- Data Interface ---
-export interface Property {
+interface Property {
   id: string;
   title: string;
+  description: string | null;
   price: number;
-  bedrooms?: number;
-  bathrooms?: number;
-  area_sqm?: number;
-  city?: string;
+  property_type: string | null;
+  bedrooms: number | null;
+  bathrooms: number | null;
+  area_sqm: number | null;
+  city: string | null;
   image_url: string;
-  amenities?: string[];
+  amenities: string[];
 }
 
-// --- SVG Icons ---
-const BedIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 4v16h20V4H2z" /><path d="M2 12h20" /><path d="M7 12V4" /><path d="M17 12V4" /></svg>
-);
-
-const BathIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l2 2" /><path d="M13 6l-2 2" /><path d="M11 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h18a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-4" /><path d="M11 14v4" /></svg>
-);
-
-const AreaIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 3H3v18h18V3z" /><path d="M12 3v18" /><path d="M3 12h18" /></svg>
-);
-
-// --- Property Card Component ---
-interface PropertyCardProps {
-  property: Property;
-}
-
-export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
-  const {
-    title,
-    price,
-    bedrooms,
-    bathrooms,
-    area_sqm,
-    city,
-    image_url,
-    amenities,
-  } = property;
-
+// A detailed card that displays all property information, as requested.
+const PropertyCard = ({ property }: { property: Property }) => {
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl bg-white">
-      <div className="relative">
-        <img
-          src={image_url}
-          alt={`Image of ${title}`}
-          className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
-        />
-        {city && (
-          <div className="absolute top-3 right-3 rounded-full bg-white/80 px-3 py-1 text-sm font-medium text-gray-900 backdrop-blur-sm">
-            {city}
-          </div>
-        )}
-      </div>
-      <div className="flex flex-1 flex-col p-4">
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-          <p className="text-2xl font-bold text-blue-600">${price.toLocaleString()}</p>
-          <div className="mt-4 flex items-center space-x-4 text-sm text-gray-600">
-            {bedrooms && (
-              <div className="flex items-center space-x-1">
-                <BedIcon />
-                <span>{bedrooms} Beds</span>
-              </div>
-            )}
-            {bathrooms && (
-              <div className="flex items-center space-x-1">
-                <BathIcon />
-                <span>{bathrooms} Baths</span>
-              </div>
-            )}
-            {area_sqm && (
-              <div className="flex items-center space-x-1">
-                <AreaIcon />
-                <span>{area_sqm} m²</span>
-              </div>
-            )}
-          </div>
+    <div
+      className="relative w-[161px] h-[256px] rounded-2xl shadow-md overflow-hidden"
+      style={{
+        backgroundImage: `url(${property.image_url})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="absolute bottom-0 left-0 right-0 flex flex-col gap-1 p-3 text-white bg-gradient-to-t from-black/70 to-transparent">
+        <p className="text-sm font-semibold">{property.title}</p>
+        <div className="flex items-center gap-1 text-xs">
+          <p>${property.price.toLocaleString()}</p>
         </div>
-        {amenities && amenities.length > 0 && (
-          <div className="mt-4 border-t pt-4">
-            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Amenities</h4>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {amenities.map((amenity) => (
-                <span
-                  key={amenity}
-                  className="px-2 py-1 bg-gray-200 text-gray-800 text-xs font-medium rounded-full"
-                >
-                  {amenity}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
+        <p className="text-sm">{property.city}</p>
       </div>
     </div>
   );
 };
 
-// --- Property List Component ---
-export interface PropertyListProps {
-  properties: Property[];
-}
+// Main component to be called from the agent.
+// Renders a non-interactive carousel of detailed property cards.
+const PropertyCarousel = ({ properties }: { properties: Property[] }) => {
+  if (!properties || properties.length === 0) {
+    return null; // Don't render anything if there are no properties
+  }
 
-export const PropertyList: React.FC<PropertyListProps> = ({ properties }) => {
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-4">
-      {properties.map((property) => (
-        <PropertyCard key={property.id} property={property} />
-      ))}
+    <div className="space-y-8">
+      <Carousel
+        opts={{
+          align: "start",
+          loop: true,
+        }}
+        className="w-full sm:max-w-sm md:max-w-3xl lg:max-w-3xl"
+      >
+        <CarouselContent>
+          {properties.map((property) => (
+            <CarouselItem key={property.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 p-2">
+              <PropertyCard property={property} />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
     </div>
   );
 };
 
-// --- Component Mapping for LangGraph ---
+// --- COMPONENT MAP ---
+// This is the mapping from string names (used in the backend) to React components.
 export default {
-  PropertyList,
+  property_carousel: PropertyCarousel,
 };

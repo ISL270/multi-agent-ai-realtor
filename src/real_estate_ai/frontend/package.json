@@ -1,10 +1,25 @@
 {
-    "name": "real-estate-ai-frontend-types",
-    "version": "1.0.0",
-    "private": true,
-    "devDependencies": {
-      "@types/react": "^18.3.3",
-      "@types/react-dom": "^18.3.0",
-      "typescript": "^5.5.2"
-    }
+  "name": "real-estate-ai-frontend-types",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.1.6",
+    "lucide-react": "^0.396.0",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.5.2"
+  },
+  "scripts": {
+    "dev": "tailwindcss -i ./ui.css -o ./output.css --watch"
   }
+}

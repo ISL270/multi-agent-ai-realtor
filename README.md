@@ -1,39 +1,85 @@
 # Real Estate AI Agent
 
-An AI-powered property inquiry agent for real estate businesses in Egypt, built with LangChain and Supabase.
+An AI-powered property search agent built with LangGraph, featuring a modern React UI for displaying property results. The agent uses natural language processing to understand property search queries and returns interactive property carousels.
 
 ## Features
 
-- Natural language property search
-- Integration with Supabase database
-- Support for various property types and filters
-- Real-time property availability
+- 🏠 **Natural Language Property Search**: Ask for properties in plain English
+- 🎨 **Modern React UI**: Beautiful property cards with images and details
+- 🔄 **Interactive Carousel**: Browse through property results with navigation
+- 🗄️ **Supabase Integration**: Real-time property data from PostgreSQL database
+- 🤖 **LangGraph Architecture**: Supervisor agent managing specialized sub-agents
+- 📱 **Responsive Design**: Works on desktop and mobile devices
 
-## Setup
+## Prerequisites
 
-1. Clone the repository:
+Before running this project, make sure you have:
+
+- **Python 3.10+** installed
+- **Node.js 18+** and **npm** installed
+- **OpenAI API Key** ([Get one here](https://platform.openai.com/api-keys))
+- **Supabase Project** ([Create one here](https://supabase.com))
+- **LangSmith Account** (Optional, for tracing - [Sign up here](https://smith.langchain.com))
+
+## Quick Start
+
+1. **Clone the repository:**
    ```bash
    git clone <repository-url>
    cd real_estate_ai
    ```
 
-2. Install dependencies:
+2. **Install Python dependencies:**
    ```bash
    pip install -e .
    ```
 
-3. Configure environment variables:
-   - Copy `.env.example` to `.env`
-   - Update the values with your Supabase and OpenAI API credentials
-
-4. Run the agent:
-   ```python
-   from real_estate_ai.agents.property_inquiry_agent import PropertyInquiryAgent
-   
-   agent = PropertyInquiryAgent()
-   response = agent.answer_query("Show me 2-bedroom apartments in New Cairo under 5M EGP")
-   print(response)
+3. **Install frontend dependencies:**
+   ```bash
+   cd src/real_estate_ai/frontend
+   npm install
    ```
+
+4. **Build the frontend CSS:**
+   ```bash
+   npm run dev
+   ```
+   Keep this running in a separate terminal to watch for CSS changes.
+
+5. **Configure environment variables:**
+   ```bash
+   # Copy the example file
+   cp .env.example .env
+   
+   # Edit .env with your actual API keys
+   nano .env  # or use your preferred editor
+   ```
+
+   Required environment variables:
+   - `OPENAI_API_KEY`: Your OpenAI API key
+   - `SUPABASE_URL`: Your Supabase project URL
+   - `SUPABASE_KEY`: Your Supabase anon key
+   - `LANGSMITH_API_KEY`: (Optional) Your LangSmith API key for tracing
+
+6. **Run the application:**
+   ```bash
+   # From the project root directory
+   langgraph dev
+   ```
+
+7. **Open the application:**
+   - API: http://127.0.0.1:2024
+   - Studio UI: https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024
+   - API Docs: http://127.0.0.1:2024/docs
+
+## Usage Examples
+
+Try these natural language queries in the chat interface:
+
+- "Show me 2-bedroom apartments in New Cairo under 5M EGP"
+- "Find villas with swimming pools in 6th of October City"
+- "I need a 3-bedroom apartment with parking in Maadi"
+- "Show me properties under 3 million EGP with gardens"
 
 ## Project Structure
 
@@ -41,14 +87,89 @@ An AI-powered property inquiry agent for real estate businesses in Egypt, built 
 real_estate_ai/
 ├── src/
 │   └── real_estate_ai/
-│       ├── agents/           # Agent implementations
-│       ├── db/              # Database client and queries
-│       ├── schemas/         # Pydantic models
-│       └── utils/           # Utility functions
+│       ├── frontend/         # React UI components
+│       │   ├── ui.tsx       # Main property carousel component
+│       │   ├── ui.css       # Tailwind CSS source
+│       │   ├── output.css   # Compiled CSS (generated)
+│       │   ├── carousel.tsx # Carousel component
+│       │   ├── button.tsx   # Button component
+│       │   ├── utils.ts     # Utility functions
+│       │   ├── package.json # Frontend dependencies
+│       │   └── tailwind.config.js # Tailwind configuration
+│       ├── agents/          # LangGraph agent implementations
+│       │   ├── property_finder_agent.py
+│       │   └── appointment_booking_agent.py
+│       ├── tools/           # Agent tools
+│       │   └── property_search.py
+│       ├── models.py        # Pydantic data models
+│       ├── supabase.py      # Database client
+│       └── main.py          # Main supervisor agent
 ├── .env                     # Environment variables
-├── pyproject.toml           # Project dependencies
+├── .env.example             # Environment template
+├── langgraph.json           # LangGraph configuration
+├── pyproject.toml           # Python dependencies
 └── README.md                # This file
 ```
+
+## Troubleshooting
+
+### Frontend CSS Not Loading
+If the UI doesn't look right, make sure you've built the CSS:
+```bash
+cd src/real_estate_ai/frontend
+npm run dev
+```
+
+### Port Already in Use
+If you get "Address already in use" error:
+```bash
+# Kill existing LangGraph processes
+pkill -f "langgraph dev"
+
+# Then restart
+langgraph dev
+```
+
+### Missing Dependencies
+If you get import errors:
+```bash
+# Reinstall Python dependencies
+pip install -e .
+
+# Reinstall frontend dependencies
+cd src/real_estate_ai/frontend
+npm install
+```
+
+### Environment Variables
+Make sure your `.env` file contains all required variables:
+- `OPENAI_API_KEY`
+- `SUPABASE_URL`
+- `SUPABASE_KEY`
+
+## Development
+
+### Architecture Overview
+
+- **Supervisor Agent**: Orchestrates the conversation and delegates to specialized agents
+- **Property Finder Agent**: Handles property search queries using natural language
+- **UI Components**: React components that render property results in an interactive carousel
+- **Database**: Supabase PostgreSQL with property data and amenities
+
+### Adding New Features
+
+1. **New Agent**: Create in `src/real_estate_ai/agents/`
+2. **New Tool**: Add to `src/real_estate_ai/tools/`
+3. **New UI Component**: Add to `src/real_estate_ai/frontend/`
+4. **Database Changes**: Update `src/real_estate_ai/supabase.py`
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## License
 
