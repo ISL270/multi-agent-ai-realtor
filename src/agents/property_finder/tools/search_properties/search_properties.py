@@ -1,35 +1,37 @@
-import logging
-import uuid
-from typing import Any, Dict, List
+from typing import Annotated, Any, Dict, List
 
-from langchain_core.messages import AIMessage
-from langgraph.graph.ui import push_ui_message
+from langchain_core.messages import ToolMessage
+from langchain_core.tools import InjectedToolCallId, tool
+from langgraph.types import Command
 
-from agents.property_finder.query_supabase.property import Property
-from standard_state import StandardState
 from utils.supabase import supabase
 
-logger = logging.getLogger(__name__)
+from ..parse_property_search_query.property_search_filters import PropertySearchFilters
+from .property import Property
 
 
-def query_supabase_node(state: StandardState):
+@tool(parse_docstring=True)
+def search_properties(
+    filters: PropertySearchFilters,
+    tool_call_id: Annotated[str, InjectedToolCallId],
+) -> Command:
     """
-    Searches for properties in the database using location, price, area, room count, property type, and amenities.
+    Searches for properties based on the provided filters and updates the state.
 
-    This function uses a database-side RPC function for efficient filtering, especially for amenities.
+    This tool executes a search query against the Supabase database using the
+    structured filters provided. It then updates the shared graph state with the
+    retrieved properties and the filters used for the search.
 
     Args:
-        state: The current graph state, containing the search filters.
-    """
-    filters = state.get("filters")
-    if not filters:
-        logger.warning("No filters found in state, returning empty list.")
-        return {"properties": []}
+        filters: A Pydantic model containing the structured search criteria.
+        tool_call_id: The ID of the tool call, injected by LangGraph.
 
+    Returns:
+        A Command object to update the graph's state with the new properties and filters.
+    """
     try:
         # Validate and normalize input
         amenities = [a.strip().lower() for a in (filters.amenities or []) if a and a.strip()] or None
-
         sort_by = filters.sort_by if filters.sort_by in ALLOWED_SORT_FIELDS else "price"
         sort_order = filters.sort_order if filters.sort_order in ALLOWED_SORT_ORDERS else "desc"
 
@@ -53,44 +55,43 @@ def query_supabase_node(state: StandardState):
 
         # Ensure we always have at least one parameter to avoid function ambiguity
         if not params:
-            params = {"p_city": None}
+            params["p_city"] = None
 
         # Call the RPC function
         response = supabase.rpc("search_properties_rpc", params).execute()
 
         if not response.data:
-            return {"properties": []}
+            success_message = "No properties found matching your criteria."
+            return Command(
+                update={
+                    "properties": [],
+                    "filters": filters,
+                    "messages": [ToolMessage(content=success_message, tool_call_id=tool_call_id)],
+                }
+            )
 
         # Map DB rows to models, using amenities directly from the RPC result
         properties = [_map_to_property(prop, prop.get("amenities", [])) for prop in response.data]
 
-        # Convert Pydantic models to dicts for JSON serialization to the frontend.
-        # Note: .dict() is for Pydantic v1. If using v2, this would be .model_dump().
-        properties_as_dicts = [p.dict() for p in properties]
+        # Update state with found properties and filters
+        success_message = f"Found {len(properties)} properties matching your criteria."
 
-        message_content = f"I found {len(properties)} properties matching your criteria."
-        if len(properties) == 1:
-            message_content = "I found 1 property matching your criteria."
-
-        message = AIMessage(
-            id=str(uuid.uuid4()),
-            content=message_content,
+        return Command(
+            update={
+                "properties": properties,
+                "filters": filters,
+                "messages": [ToolMessage(content=success_message, tool_call_id=tool_call_id)],
+            }
         )
-
-        # Try to push UI message, but don't fail if it's not in a runnable context
-        try:
-            push_ui_message(
-                "property_carousel",
-                {"properties": properties_as_dicts},
-                message=message,
-            )
-        except Exception as ui_error:
-            logger.warning(f"Failed to push UI message: {str(ui_error)}")
-
-        return {"properties": properties, "messages": [message]}
     except Exception as e:
-        logger.error(f"Error searching properties: {str(e)}", exc_info=True)
-        return {"properties": []}
+        error_message = f"An error occurred while searching for properties: {e}"
+        return Command(
+            update={
+                "properties": [],
+                "filters": filters,
+                "messages": [ToolMessage(content=error_message, tool_call_id=tool_call_id)],
+            }
+        )
 
 
 def _map_to_property(prop: Dict[str, Any], amenities: List[str]) -> Property:

@@ -38,6 +38,9 @@ const PropertyCard = ({ property }: { property: Property }) => {
         <div className="flex items-center gap-1 text-xs">
           <p>${property.price.toLocaleString()}</p>
         </div>
+        {property.bedrooms && (
+          <p className="text-xs">{property.bedrooms} bed{property.bedrooms !== 1 ? 's' : ''}</p>
+        )}
         <p className="text-sm">{property.city}</p>
       </div>
     </div>

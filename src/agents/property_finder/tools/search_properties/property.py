@@ -1,14 +1,7 @@
 from typing import List, Optional
-
 from pydantic import BaseModel
 
-
 class Property(BaseModel):
-    """
-    Represents a single property listing with a single, required image URL.
-    All fields are strictly typed for maximum type safety.
-    """
-
     id: str
     title: str
     description: Optional[str]
@@ -18,5 +11,5 @@ class Property(BaseModel):
     bathrooms: Optional[int]
     city: Optional[str]
     area_sqm: Optional[float]
-    image_url: str  # Non-optional. Always a valid image URL for this property.
+    image_url: str
     amenities: List[str] = []
