@@ -1,15 +1,17 @@
-# Real Estate AI Agent
+# AI Real Estate Assistant
 
-An AI-powered property search agent built with LangGraph, featuring a modern React UI for displaying property results. The agent uses natural language processing to understand property search queries and returns interactive property carousels.
+A sophisticated AI-powered real estate assistant built with LangGraph, featuring a clean supervisor-agent architecture and modern React UI. The system uses natural language processing to understand property searches and manage calendar appointments with interactive property carousels.
 
 ## Features
 
 - 🏠 **Natural Language Property Search**: Ask for properties in plain English
-- 🎨 **Modern React UI**: Beautiful property cards with images and details
-- 🔄 **Interactive Carousel**: Browse through property results with navigation
+- 📅 **Smart Calendar Management**: Schedule property viewings with intelligent calendar coordination
+- 🎨 **Modern React UI**: Beautiful property carousels with responsive design
+- 🔄 **Interactive Property Display**: Browse through search results with smooth navigation
 - 🗄️ **Supabase Integration**: Real-time property data from PostgreSQL database
-- 🤖 **LangGraph Architecture**: Supervisor agent managing specialized sub-agents
-- 📱 **Responsive Design**: Works on desktop and mobile devices
+- 🤖 **Clean LangGraph Architecture**: Supervisor pattern with specialized agents
+- 💾 **User Memory Management**: Remembers user preferences and information
+- 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
 
 ## Prerequisites
 
@@ -87,42 +89,44 @@ Try these natural language queries in the chat interface:
 real_estate_ai/
 ├── src/
 │   ├── agents/                    # LangGraph agent implementations
-│   │   ├── appointment_booking/   # Appointment booking agent
-│   │   │   ├── tools/            # Booking-specific tools
-│   │   │   │   ├── find_available_slots.py
-│   │   │   │   └── schedule_viewing.py
-│   │   │   └── appointment_booking_agent.py
-│   │   └── property_finder/       # Property search agent
-│   │       ├── tools/            # Property search tools
-│   │       │   ├── parse_property_search_query/
-│   │       │   │   ├── parse_property_search_query.py
-│   │       │   │   └── property_search_filters.py
-│   │       │   └── search_properties/
-│   │       │       ├── search_properties.py
-│   │       │       └── property.py
-│   │       └── property_finder_agent.py
-│   ├── tools/                     # Supervisor-level tools
-│   │   └── create_property_ui.py  # UI creation tool
-│   ├── frontend/                  # React UI components
-│   │   ├── ui.tsx                # Main property carousel component
-│   │   ├── ui.css                # Tailwind CSS source
-│   │   ├── output.css            # Compiled CSS (generated)
-│   │   ├── carousel.tsx          # Carousel component
-│   │   ├── button.tsx            # Button component
-│   │   ├── utils.ts              # Utility functions
-│   │   ├── package.json          # Frontend dependencies
-│   │   └── tailwind.config.js    # Tailwind configuration
-│   ├── utils/                     # Shared utilities
-│   │   ├── google_calendar.py    # Google Calendar integration
-│   │   └── supabase.py           # Database client
-│   ├── main.py                    # Main supervisor agent
-│   ├── standard_state.py          # Shared state definition
-│   └── user_profile.py            # User profile model
-├── .env                           # Environment variables
-├── .env.example                   # Environment template
-├── langgraph.json                 # LangGraph configuration
-├── pyproject.toml                 # Python dependencies
-└── README.md                      # This file
+│   │   ├── supervisor/           # Supervisor agent and configuration
+│   │   │   ├── tools/           # Supervisor-level tools
+│   │   │   │   └── render_property_carousel.py
+│   │   │   ├── app_state.py     # Application state schema
+│   │   │   ├── supervisor.py    # Supervisor agent factory
+│   │   │   └── user_profile.py  # User profile model
+│   │   ├── property_finder/     # Property search specialist
+│   │   │   ├── tools/          # Property search tools
+│   │   │   │   ├── parse_property_search_query/
+│   │   │   │   │   ├── parse_property_search_query.py
+│   │   │   │   │   └── property_search_filters.py
+│   │   │   │   └── search_properties/
+│   │   │   │       ├── search_properties.py
+│   │   │   │       └── property.py
+│   │   │   └── property_finder_agent.py
+│   │   └── calendar_manager/    # Calendar and scheduling specialist
+│   │       ├── tools/          # Calendar management tools
+│   │       │   ├── find_available_slots.py
+│   │       │   └── schedule_viewing.py
+│   │       └── calendar_manager.py
+│   ├── frontend/                 # React UI components
+│   │   ├── ui.tsx               # Main property carousel component
+│   │   ├── ui.css               # Tailwind CSS source
+│   │   ├── output.css           # Compiled CSS (generated)
+│   │   ├── carousel.tsx         # Carousel component
+│   │   ├── button.tsx           # Button component
+│   │   ├── utils.ts             # Utility functions
+│   │   ├── package.json         # Frontend dependencies
+│   │   └── tailwind.config.js   # Tailwind configuration
+│   ├── utils/                    # Shared utilities
+│   │   ├── google_calendar.py   # Google Calendar integration
+│   │   └── supabase.py          # Database client
+│   └── graph.py                  # Main application entry point
+├── .env                          # Environment variables
+├── .env.example                  # Environment template
+├── langgraph.json                # LangGraph configuration
+├── pyproject.toml                # Python dependencies
+└── README.md                     # This file
 ```
 
 ## Troubleshooting
@@ -165,35 +169,65 @@ Make sure your `.env` file contains all required variables:
 
 ### Architecture Overview
 
-The application follows a clean **supervisor-agent pattern** with centralized UI management:
+The application follows a **clean supervisor-agent pattern** with modular, specialized components:
 
-- **Supervisor Agent** (`main.py`): Orchestrates conversation flow, manages user memory, and handles UI creation
-- **Property Finder Agent**: Specialized agent that parses search queries and finds matching properties
-- **Appointment Booking Agent**: Handles scheduling property viewings
-- **Supervisor Tools**: UI creation and state management tools at the supervisor level
-- **React UI Components**: Modern, responsive property carousel with Tailwind CSS
-- **Database**: Supabase PostgreSQL with property data, amenities, and RPC functions
+#### **Core Components:**
+- **Supervisor Agent** (`src/agents/supervisor/`): Orchestrates conversation flow, manages user memory, and coordinates UI rendering
+- **Property Finder** (`src/agents/property_finder/`): Specialized agent for natural language property search and filtering
+- **Calendar Manager** (`src/agents/calendar_manager/`): Handles scheduling, availability checking, and appointment booking
+- **React UI Components** (`src/frontend/`): Modern, responsive property carousel with Tailwind CSS
+- **Database Integration** (`src/utils/`): Supabase PostgreSQL with property data and RPC functions
 
-#### Key Design Principles:
-- **Separation of Concerns**: Agents focus on domain logic, supervisor handles orchestration
-- **Centralized UI**: All UI creation happens at supervisor level for consistency
-- **Stateless Tools**: Tools use Command pattern for clean state updates
-- **Type Safety**: Full TypeScript/Python type annotations throughout
+#### **Key Design Principles:**
+- **🏗️ Modular Architecture**: Each agent is self-contained with its own tools and responsibilities
+- **🎯 Separation of Concerns**: Agents focus on domain expertise, supervisor handles orchestration
+- **🎨 Centralized UI**: All UI rendering happens at supervisor level using `render_property_carousel`
+- **⚡ Stateless Tools**: Tools use Command pattern for clean, predictable state updates
+- **🔒 Type Safety**: Full TypeScript/Python type annotations throughout the codebase
+- **📦 Clean Imports**: Proper module organization with clear dependency paths
+
+#### **Agent Workflow:**
+1. **User Input** → Supervisor analyzes intent and delegates to appropriate agent
+2. **Property Search** → Property Finder parses query and searches database
+3. **UI Rendering** → Supervisor uses `render_property_carousel` to display results
+4. **Appointment Booking** → Calendar Manager handles scheduling when requested
 
 ### Adding New Features
 
-1. **New Agent**: Create in `src/agents/` and add to supervisor's agents list
-2. **New Agent Tool**: Add to agent's `tools/` directory
-3. **New Supervisor Tool**: Add to `src/tools/` and supervisor's tools list
-4. **New UI Component**: Add to `src/frontend/` and export from `ui.tsx`
-5. **Database Changes**: Update RPC functions in Supabase and `src/utils/supabase.py`
+#### **New Agent:**
+1. Create agent directory in `src/agents/new_agent/`
+2. Implement agent in `new_agent.py` using `create_react_agent`
+3. Add agent to supervisor's agents list in `supervisor.py`
+4. Update supervisor prompt with delegation instructions
 
-#### Tool Development Guidelines:
-- Use `@tool(parse_docstring=True)` decorator
-- Return `Command` objects for state updates
-- Keep tools stateless when possible
-- Add proper type annotations
-- Follow the established naming patterns
+#### **New Agent Tool:**
+1. Create tool in `src/agents/agent_name/tools/`
+2. Use `@tool(parse_docstring=True)` decorator
+3. Return `Command` objects for state updates
+4. Add to agent's tools list
+
+#### **New Supervisor Tool:**
+1. Create tool in `src/agents/supervisor/tools/`
+2. Import and add to supervisor's tools list
+3. Update supervisor prompt with usage instructions
+
+#### **New UI Component:**
+1. Add React component to `src/frontend/`
+2. Export from `ui.tsx`
+3. Update Tailwind CSS if needed
+4. Test responsive design
+
+#### **Database Changes:**
+1. Update RPC functions in Supabase
+2. Modify `src/utils/supabase.py` client
+3. Update relevant property/data models
+
+#### **Development Guidelines:**
+- **Naming**: Use descriptive names ending in "-er" for agents (e.g., `property_finder`, `calendar_manager`)
+- **Tools**: Keep stateless, return `Command` objects, use proper type annotations
+- **State**: Use `AppState` for shared state, avoid direct state mutation
+- **Imports**: Use relative imports within modules, absolute from project root
+- **Documentation**: Update README and add docstrings for new components
 
 ## Contributing
 

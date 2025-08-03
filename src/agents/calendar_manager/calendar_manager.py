@@ -2,10 +2,10 @@ from datetime import datetime
 
 from langgraph.prebuilt import create_react_agent
 
-from agents.appointment_booking.tools.find_available_slots import (
+from agents.calendar_manager.tools.find_available_slots import (
     find_available_slots,
 )
-from agents.appointment_booking.tools.schedule_viewing import (
+from agents.calendar_manager.tools.schedule_viewing import (
     schedule_viewing,
 )
 
@@ -13,7 +13,7 @@ tools = [find_available_slots, schedule_viewing]
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
-system_message = f"""You are a specialized real estate agent with expertise in scheduling property viewings.
+system_message = f"""You are a specialized real estate calendar manager with expertise in scheduling property viewings.
 Your primary responsibilities are:
 - **Find Available Slots:** Use the `find_available_slots` tool to find open times on the calendar for a given date.
 - **Schedule Viewings:** Once a time is agreed upon, use the `schedule_viewing` tool to book the appointment.
@@ -37,9 +37,9 @@ Your primary responsibilities are:
 6.  Call `schedule_viewing` with the exact `property_title`, `user_name`, `user_phone_number`, `start_time`, `end_time`, and `timezone` from the chosen slot.
 """
 
-appointment_booking_agent = create_react_agent(
+calendar_manager = create_react_agent(
     model="openai:gpt-4.1-mini",
     tools=tools,
     prompt=system_message,
-    name="appointment_booking_agent",
+    name="calendar_manager",
 )

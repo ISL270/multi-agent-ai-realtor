@@ -1,6 +1,6 @@
 from langgraph.prebuilt import create_react_agent
 
-from standard_state import StandardState
+from agents.supervisor.app_state import AppState
 
 from .tools.parse_property_search_query.parse_property_search_query import (
     parse_property_search_query,
@@ -9,7 +9,7 @@ from .tools.search_properties.search_properties import search_properties
 
 property_finder_agent = create_react_agent(
     model="openai:gpt-4.1-mini",
-    state_schema=StandardState,
+    state_schema=AppState,
     prompt="""You are a specialized real estate property search assistant.
 
             Your primary function is to use the tools provided to find properties that match the user's criteria.

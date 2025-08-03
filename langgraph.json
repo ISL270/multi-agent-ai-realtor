@@ -1,7 +1,7 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "agent": "main:supervisor"
+    "agent": "graph:supervisor"
   },
   "ui": {
     "agent": "./src/frontend/ui.tsx"
