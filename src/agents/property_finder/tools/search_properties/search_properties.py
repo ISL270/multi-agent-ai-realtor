@@ -32,7 +32,10 @@ def search_properties(
     try:
         # Validate and normalize input
         amenities = [a.strip().lower() for a in (filters.amenities or []) if a and a.strip()] or None
-        sort_by = filters.sort_by if filters.sort_by in ALLOWED_SORT_FIELDS else "price"
+        
+        # Map sort_by field from user-friendly names to database column names
+        sort_by_mapping = {"area": "area_sqm", "price": "price"}
+        sort_by = sort_by_mapping.get(filters.sort_by, "price") if filters.sort_by else "price"
         sort_order = filters.sort_order if filters.sort_order in ALLOWED_SORT_ORDERS else "desc"
 
         params = {
