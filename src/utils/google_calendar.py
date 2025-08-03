@@ -28,7 +28,7 @@ def get_service_account_file_path() -> str:
         return service_account_file
 
     # Fallback to default location in project root
-    default_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "service_account.json")
+    default_path = os.path.join(os.path.dirname(__file__), "..", "..", "service_account.json")
 
     if os.path.exists(default_path):
         return default_path

@@ -1,5 +1,5 @@
 import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from googleapiclient.discovery import Resource
@@ -10,17 +10,18 @@ from utils.google_calendar import get_calendar_service
 
 @tool(parse_docstring=True)
 def find_available_slots(date: str) -> List[Dict[str, str]]:
-    """Finds available 30-minute appointment slots for a given date in Google Calendar.
+    """Finds available 1-hour appointment slots for a given date in Google Calendar.
 
     Args:
         date (str): The date to check for available slots, in 'YYYY-MM-DD' format.
 
     Returns:
-        A list of available slots, where each slot is a dictionary with 'start' and 'end' times.
+        A formatted list of available time slots for property viewings.
     """
-    service: Optional[Resource] = get_calendar_service()
-    if not service:
-        return [{"error": "Failed to connect to Google Calendar."}]
+    try:
+        service: Resource = get_calendar_service()
+    except (ValueError, RuntimeError) as e:
+        return [{"error": f"Failed to connect to Google Calendar: {str(e)}"}]
 
     try:
         day = datetime.datetime.strptime(date, "%Y-%m-%d").date()
@@ -55,8 +56,14 @@ def find_available_slots(date: str) -> List[Dict[str, str]]:
     available_slots = []
     slot_start = time_min
 
+    # Generate 1-hour slots
     while slot_start < time_max:
-        slot_end = slot_start + datetime.timedelta(minutes=30)
+        slot_end = slot_start + datetime.timedelta(hours=1)
+        
+        # Skip if slot would extend beyond business hours
+        if slot_end > time_max:
+            break
+            
         is_busy = False
         for event in busy_slots:
             # Google API returns timezone-aware ISO strings, so fromisoformat works directly
@@ -69,11 +76,30 @@ def find_available_slots(date: str) -> List[Dict[str, str]]:
                 break
 
         if not is_busy:
-            available_slots.append({"start": slot_start.isoformat(), "end": slot_end.isoformat(), "timezone": tz_str})
+            # Format time for display (e.g., "10:00 AM - 11:00 AM")
+            start_time = slot_start.strftime("%I:%M %p").lstrip('0')
+            end_time = slot_end.strftime("%I:%M %p").lstrip('0')
+            time_display = f"{start_time} - {end_time}"
+            
+            available_slots.append({
+                "time_display": time_display,
+                "start": slot_start.isoformat(), 
+                "end": slot_end.isoformat(), 
+                "timezone": tz_str
+            })
 
-        slot_start = slot_end
+        slot_start = slot_start + datetime.timedelta(hours=1)
 
     if not available_slots:
-        return [{"message": "No available slots found for the selected date."}]
+        return [{"message": "❌ No available slots found for the selected date."}]
 
-    return available_slots
+    # Format the response more appealingly
+    formatted_slots = []
+    formatted_slots.append({"message": f"📅 **Available viewing slots for {day.strftime('%B %d, %Y')}:**"})
+    
+    for i, slot in enumerate(available_slots, 1):
+        formatted_slots.append({"slot": f"🕐 **{i}.** {slot['time_display']}", "data": slot})
+    
+    formatted_slots.append({"message": "\n💡 **Please choose your preferred time and provide your name and phone number to book.**"})
+    
+    return formatted_slots

@@ -36,7 +36,7 @@ def create_ai_realtor() -> StateGraph:
             render_property_carousel,
             forward_message,
         ],
-        output_mode="last_message",
+        output_mode="full_history",
         prompt="""You are a helpful and friendly real estate agent supervisor.
                 Your primary role is to manage the conversation with the user and delegate tasks to specialized agents.
 

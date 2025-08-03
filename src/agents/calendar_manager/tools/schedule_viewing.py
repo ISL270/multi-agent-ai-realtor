@@ -1,5 +1,3 @@
-from typing import Optional
-
 from googleapiclient.discovery import Resource
 from langchain_core.tools import tool
 
@@ -31,12 +29,19 @@ def schedule_viewing(
     if not user_phone_number:
         return "Error: The user's phone number is required to schedule a viewing. Please ask the user for their phone number."
 
-    service: Optional[Resource] = get_calendar_service()
-    if not service:
-        return "Failed to connect to Google Calendar."
+    try:
+        service: Resource = get_calendar_service()
+    except (ValueError, RuntimeError) as e:
+        return f"Failed to connect to Google Calendar: {str(e)}"
 
     summary = f"Property Viewing: {property_title} for {user_name}"
-    description = f"Contact: {user_phone_number}"
+    description = f"""📋 Property Viewing Details:
+🏠 Property: {property_title}
+👤 Client: {user_name}
+📞 Phone: {user_phone_number}
+
+📅 Please arrive 5 minutes early for the viewing.
+💼 Bring a valid ID and any questions about the property."""
 
     event = {
         "summary": summary,
