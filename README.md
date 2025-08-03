@@ -93,13 +93,16 @@ real_estate_ai/
 │   │   │   │   └── schedule_viewing.py
 │   │   │   └── appointment_booking_agent.py
 │   │   └── property_finder/       # Property search agent
-│   │       ├── parse_query/      # Query parsing module
-│   │       │   ├── parse_query_node.py
-│   │       │   └── property_search_filters.py
-│   │       ├── query_supabase/   # Database query module
-│   │       │   ├── property.py
-│   │       │   └── query_supabase_node.py
-│   │       └── property_finder.py
+│   │       ├── tools/            # Property search tools
+│   │       │   ├── parse_property_search_query/
+│   │       │   │   ├── parse_property_search_query.py
+│   │       │   │   └── property_search_filters.py
+│   │       │   └── search_properties/
+│   │       │       ├── search_properties.py
+│   │       │       └── property.py
+│   │       └── property_finder_agent.py
+│   ├── tools/                     # Supervisor-level tools
+│   │   └── create_property_ui.py  # UI creation tool
 │   ├── frontend/                  # React UI components
 │   │   ├── ui.tsx                # Main property carousel component
 │   │   ├── ui.css                # Tailwind CSS source
@@ -162,17 +165,35 @@ Make sure your `.env` file contains all required variables:
 
 ### Architecture Overview
 
-- **Supervisor Agent**: Orchestrates the conversation and delegates to specialized agents
-- **Property Finder Agent**: Handles property search queries using natural language
-- **UI Components**: React components that render property results in an interactive carousel
-- **Database**: Supabase PostgreSQL with property data and amenities
+The application follows a clean **supervisor-agent pattern** with centralized UI management:
+
+- **Supervisor Agent** (`main.py`): Orchestrates conversation flow, manages user memory, and handles UI creation
+- **Property Finder Agent**: Specialized agent that parses search queries and finds matching properties
+- **Appointment Booking Agent**: Handles scheduling property viewings
+- **Supervisor Tools**: UI creation and state management tools at the supervisor level
+- **React UI Components**: Modern, responsive property carousel with Tailwind CSS
+- **Database**: Supabase PostgreSQL with property data, amenities, and RPC functions
+
+#### Key Design Principles:
+- **Separation of Concerns**: Agents focus on domain logic, supervisor handles orchestration
+- **Centralized UI**: All UI creation happens at supervisor level for consistency
+- **Stateless Tools**: Tools use Command pattern for clean state updates
+- **Type Safety**: Full TypeScript/Python type annotations throughout
 
 ### Adding New Features
 
-1. **New Agent**: Create in `src/agents/`
-2. **New Tool**: Add to `src/tools/`
-3. **New UI Component**: Add to `src/frontend/`
-4. **Database Changes**: Update `src/supabase.py`
+1. **New Agent**: Create in `src/agents/` and add to supervisor's agents list
+2. **New Agent Tool**: Add to agent's `tools/` directory
+3. **New Supervisor Tool**: Add to `src/tools/` and supervisor's tools list
+4. **New UI Component**: Add to `src/frontend/` and export from `ui.tsx`
+5. **Database Changes**: Update RPC functions in Supabase and `src/utils/supabase.py`
+
+#### Tool Development Guidelines:
+- Use `@tool(parse_docstring=True)` decorator
+- Return `Command` objects for state updates
+- Keep tools stateless when possible
+- Add proper type annotations
+- Follow the established naming patterns
 
 ## Contributing
 
