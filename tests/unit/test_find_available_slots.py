@@ -168,7 +168,7 @@ class TestFindAvailableSlotsCustom:
         # Setup the mock chain
         mock_service.events.return_value = mock_events
         mock_events.list.return_value = mock_list
-        
+
         # Mock empty calendar response - execute() should return the events dict directly
         mock_list.execute.return_value = {"items": []}
 
@@ -189,15 +189,15 @@ class TestFindAvailableSlotsCustom:
         # Verify business hours (9 AM - 5 PM)
         assert "T09:00:00" in time_min
         assert "T17:00:00" in time_max
-        
+
         # Verify the tool returns available slots for empty calendar (no conflicts)
         assert isinstance(result, list)
         assert len(result) > 1  # Should have header + slots + footer
-        
+
         # First item should be the header message
         assert "message" in result[0]
         assert "Available viewing slots for March 15, 2024" in result[0]["message"]
-        
+
         # Should have actual slot data (8 business hours = 8 slots)
         slot_items = [item for item in result if "slot" in item]
         assert len(slot_items) == 8  # 9 AM - 5 PM = 8 one-hour slots

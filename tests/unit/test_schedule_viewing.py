@@ -73,14 +73,16 @@ class TestScheduleViewingCustom:
         mock_get_calendar_service.return_value = mock_service
 
         # Call the tool
-        result = schedule_viewing.invoke({
-            "property_title": "Luxury Apartment in New Cairo",
-            "user_name": "Sarah Mohamed",
-            "user_phone_number": "+201987654321",
-            "start_time": "2024-03-20T10:00:00",
-            "end_time": "2024-03-20T11:00:00",
-            "timezone": "Africa/Cairo",
-        })
+        result = schedule_viewing.invoke(
+            {
+                "property_title": "Luxury Apartment in New Cairo",
+                "user_name": "Sarah Mohamed",
+                "user_phone_number": "+201987654321",
+                "start_time": "2024-03-20T10:00:00",
+                "end_time": "2024-03-20T11:00:00",
+                "timezone": "Africa/Cairo",
+            }
+        )
 
         # Verify the result
         assert isinstance(result, str)
@@ -94,7 +96,7 @@ class TestScheduleViewingCustom:
         # Verify the event data structure
         call_args = mock_events.insert.call_args
         assert call_args[1]["calendarId"] == "primary"
-        
+
         event_body = call_args[1]["body"]
         assert "Property Viewing: Luxury Apartment in New Cairo for Sarah Mohamed" in event_body["summary"]
         assert "Sarah Mohamed" in event_body["description"]
@@ -107,26 +109,30 @@ class TestScheduleViewingCustom:
     def test_missing_phone_number_validation(self):
         """Test validation when phone number is missing or empty."""
         # Test with empty phone number
-        result = schedule_viewing.invoke({
-            "property_title": "Test Property",
-            "user_name": "Test User",
-            "user_phone_number": "",
-            "start_time": "2024-03-15T14:00:00",
-            "end_time": "2024-03-15T15:00:00",
-            "timezone": "Africa/Cairo",
-        })
+        result = schedule_viewing.invoke(
+            {
+                "property_title": "Test Property",
+                "user_name": "Test User",
+                "user_phone_number": "",
+                "start_time": "2024-03-15T14:00:00",
+                "end_time": "2024-03-15T15:00:00",
+                "timezone": "Africa/Cairo",
+            }
+        )
 
         assert "Error: The user's phone number is required" in result
 
         # Test with whitespace-only phone number
-        result = schedule_viewing.invoke({
-            "property_title": "Test Property",
-            "user_name": "Test User",
-            "user_phone_number": "   ",
-            "start_time": "2024-03-15T14:00:00",
-            "end_time": "2024-03-15T15:00:00",
-            "timezone": "Africa/Cairo",
-        })
+        result = schedule_viewing.invoke(
+            {
+                "property_title": "Test Property",
+                "user_name": "Test User",
+                "user_phone_number": "   ",
+                "start_time": "2024-03-15T14:00:00",
+                "end_time": "2024-03-15T15:00:00",
+                "timezone": "Africa/Cairo",
+            }
+        )
 
         # This should pass through since it's a valid string, but the tool should handle it
         # The current implementation only checks for empty string, not whitespace
@@ -138,14 +144,16 @@ class TestScheduleViewingCustom:
         mock_get_calendar_service.side_effect = ValueError("Authentication failed")
 
         # Call the tool
-        result = schedule_viewing.invoke({
-            "property_title": "Test Property",
-            "user_name": "Test User",
-            "user_phone_number": "+201234567890",
-            "start_time": "2024-03-15T14:00:00",
-            "end_time": "2024-03-15T15:00:00",
-            "timezone": "Africa/Cairo",
-        })
+        result = schedule_viewing.invoke(
+            {
+                "property_title": "Test Property",
+                "user_name": "Test User",
+                "user_phone_number": "+201234567890",
+                "start_time": "2024-03-15T14:00:00",
+                "end_time": "2024-03-15T15:00:00",
+                "timezone": "Africa/Cairo",
+            }
+        )
 
         # Verify error handling
         assert "Failed to connect to Google Calendar" in result
@@ -169,14 +177,16 @@ class TestScheduleViewingCustom:
         mock_get_calendar_service.return_value = mock_service
 
         # Call the tool
-        result = schedule_viewing.invoke({
-            "property_title": "Test Property",
-            "user_name": "Test User",
-            "user_phone_number": "+201234567890",
-            "start_time": "2024-03-15T14:00:00",
-            "end_time": "2024-03-15T15:00:00",
-            "timezone": "Africa/Cairo",
-        })
+        result = schedule_viewing.invoke(
+            {
+                "property_title": "Test Property",
+                "user_name": "Test User",
+                "user_phone_number": "+201234567890",
+                "start_time": "2024-03-15T14:00:00",
+                "end_time": "2024-03-15T15:00:00",
+                "timezone": "Africa/Cairo",
+            }
+        )
 
         # Verify error handling
         assert "An error occurred while creating the event" in result
@@ -200,14 +210,16 @@ class TestScheduleViewingCustom:
         mock_get_calendar_service.return_value = mock_service
 
         # Call the tool with specific test data
-        schedule_viewing.invoke({
-            "property_title": "Modern Penthouse in Zamalek",
-            "user_name": "Omar Khaled",
-            "user_phone_number": "+201555123456",
-            "start_time": "2024-04-10T16:30:00",
-            "end_time": "2024-04-10T17:30:00",
-            "timezone": "Africa/Cairo",
-        })
+        schedule_viewing.invoke(
+            {
+                "property_title": "Modern Penthouse in Zamalek",
+                "user_name": "Omar Khaled",
+                "user_phone_number": "+201555123456",
+                "start_time": "2024-04-10T16:30:00",
+                "end_time": "2024-04-10T17:30:00",
+                "timezone": "Africa/Cairo",
+            }
+        )
 
         # Get the event body that was passed to the API
         call_args = mock_events.insert.call_args
@@ -258,14 +270,16 @@ class TestScheduleViewingCustom:
         mock_get_calendar_service.return_value = mock_service
 
         # Test with different timezone
-        schedule_viewing.invoke({
-            "property_title": "Beach House in Sahel",
-            "user_name": "Layla Ahmed",
-            "user_phone_number": "+201777888999",
-            "start_time": "2024-06-15T09:00:00",
-            "end_time": "2024-06-15T10:00:00",
-            "timezone": "Europe/London",
-        })
+        schedule_viewing.invoke(
+            {
+                "property_title": "Beach House in Sahel",
+                "user_name": "Layla Ahmed",
+                "user_phone_number": "+201777888999",
+                "start_time": "2024-06-15T09:00:00",
+                "end_time": "2024-06-15T10:00:00",
+                "timezone": "Europe/London",
+            }
+        )
 
         # Verify timezone is correctly set
         call_args = mock_events.insert.call_args
@@ -291,19 +305,21 @@ class TestScheduleViewingCustom:
         mock_get_calendar_service.return_value = mock_service
 
         # Test with special characters
-        schedule_viewing.invoke({
-            "property_title": "Villa with Pool & Garden (Premium)",
-            "user_name": "José María García",
-            "user_phone_number": "+20-1-555-123-456",
-            "start_time": "2024-05-20T11:15:00",
-            "end_time": "2024-05-20T12:15:00",
-            "timezone": "Africa/Cairo",
-        })
+        schedule_viewing.invoke(
+            {
+                "property_title": "Villa with Pool & Garden (Premium)",
+                "user_name": "José María García",
+                "user_phone_number": "+20-1-555-123-456",
+                "start_time": "2024-05-20T11:15:00",
+                "end_time": "2024-05-20T12:15:00",
+                "timezone": "Africa/Cairo",
+            }
+        )
 
         # Verify special characters are preserved
         call_args = mock_events.insert.call_args
         event_body = call_args[1]["body"]
-        
+
         assert "Villa with Pool & Garden (Premium)" in event_body["summary"]
         assert "José María García" in event_body["description"]
         assert "+20-1-555-123-456" in event_body["description"]
@@ -324,11 +340,8 @@ class TestScheduleViewingCustom:
 
         # Check required fields in schema
         schema_fields = schema.model_fields
-        required_fields = [
-            "property_title", "user_name", "user_phone_number", 
-            "start_time", "end_time", "timezone"
-        ]
-        
+        required_fields = ["property_title", "user_name", "user_phone_number", "start_time", "end_time", "timezone"]
+
         for field in required_fields:
             assert field in schema_fields
 
