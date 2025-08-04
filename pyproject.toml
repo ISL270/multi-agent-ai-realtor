@@ -1,7 +1,7 @@
 [project]
-name = "real_estate_ai"
+name = "multi-agent-ai-realtor"
 version = "0.1.0"
-description = "AI agent for real estate property inquiries in Egypt"
+description = "Multi-agent AI system for real estate property search and appointment booking using LangGraph"
 requires-python = ">=3.10"
 dependencies = [
     "langchain>=0.3.0",

@@ -1,4 +1,4 @@
-# AI Real Estate Assistant
+# Multi-Agent AI Realtor
 
 <div align="center">
   <table>
@@ -53,8 +53,8 @@ Before running this project, make sure you have:
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
-   cd real_estate_ai
+   git clone https://github.com/yourusername/multi-agent-ai-realtor.git
+   cd multi-agent-ai-realtor
    ```
 
 2. **Install Python dependencies:**
@@ -103,7 +103,7 @@ Try these natural language queries in the chat interface:
 ## Project Structure
 
 ```
-real_estate_ai/
+multi-agent-ai-realtor/
 ├── src/
 │   ├── agents/                   # LangGraph agent implementations
 │   │   ├── supervisor/          # Supervisor agent and state management
