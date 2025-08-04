@@ -10,6 +10,7 @@ A multi-agent real estate AI assistant built using **LangChain**, **LangGraph**,
 - 🤖 **Clean LangGraph Architecture**: Supervisor pattern with specialized sub-agents
 - 💾 **Long-Term Memory**: Remembers user preferences and information across conversation threads
 - 🗄️ **Supabase Integration**: Real-time property data from PostgreSQL database
+- 🧪 **Comprehensive Testing**: 70+ unit tests with full LangGraph tool coverage
 
 ## Prerequisites
 
@@ -84,6 +85,9 @@ real_estate_ai/
 │   ├── frontend/                # React UI components (Tailwind CSS)
 │   ├── utils/                   # Shared utilities (Supabase, Google Calendar)
 │   └── graph.py                 # Main application entry point
+├── tests/                       # Comprehensive unit test suite
+│   ├── conftest.py             # Global test configuration
+│   └── unit/                   # Unit tests for LangGraph tools
 ├── langgraph.json               # LangGraph configuration
 ├── pyproject.toml               # Python dependencies
 └── .env                         # Environment variables
@@ -116,13 +120,71 @@ The application follows a **clean supervisor-agent pattern** with modular, speci
 3. **UI Rendering** → Supervisor uses `render_property_carousel` to display results
 4. **Appointment Booking** → Calendar Manager handles scheduling when requested
 
+## Testing
+
+The project includes comprehensive testing for all LangGraph tools with **86 tests total** - **ALL PASSING** ✅:
+
+### **Unit Tests (70 tests):**
+- ✅ **parse_property_search_query** (12 tests): Natural language parsing with LLM mocking
+- ✅ **search_properties** (16 tests): Database queries with Supabase RPC mocking
+- ✅ **find_available_slots** (14 tests): Google Calendar API integration with timezone handling
+- ✅ **schedule_viewing** (14 tests): Event creation with input validation and error handling
+- ✅ **render_property_carousel** (14 tests): UI rendering with state injection testing
+
+### **Integration Tests (16 tests):**
+- ✅ **Property Search Flow** (5 tests): End-to-end query parsing → property search workflow
+- ✅ **Calendar Flow** (5 tests): Complete slot finding → viewing scheduling workflow
+- ✅ **Render Carousel** (6 tests): Property carousel rendering with realistic application state
+
+### **Testing Infrastructure:**
+- **LangChain Standard Tests**: Schema validation, tool initialization, and metadata verification
+- **Custom Unit Tests**: Business logic, error handling, API integration, and edge cases
+- **Integration Tests**: End-to-end workflows testing realistic tool interactions
+- **Global Mocking**: Supabase client, Google Calendar API, and LLM calls properly mocked
+- **Direct Function Testing**: Innovative approach for testing tools with `InjectedState` parameters
+
+### **Run Tests:**
+```bash
+# Run all tests (unit + integration)
+pytest tests/ -v
+
+# Run only unit tests
+pytest tests/unit/ -v
+
+# Run only integration tests
+pytest tests/integration/ -v
+
+# Run tests for a specific tool
+pytest tests/unit/test_search_properties.py -v
+```
+
+### **Test Structure:**
+```
+tests/
+├── conftest.py              # Global test configuration and mocking
+├── unit/                    # Unit tests for individual tools
+└── integration/             # Integration tests for end-to-end workflows
+```
+
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+4. **Add/update tests** for any new functionality
+5. **Run the test suite**: `pytest tests/ -v` (both unit and integration tests)
+6. Ensure all tests pass
+7. Submit a pull request
+
+### **Testing Guidelines:**
+- All new LangGraph tools must include comprehensive unit tests
+- Add integration tests for new workflows or tool interactions
+- Follow the established testing patterns (LangChain Standard Tests + Custom Tests)
+- Mock external dependencies (Supabase, Google Calendar, LLM calls)
+- Test error handling, edge cases, and input validation
+- Maintain the current test coverage standards (86+ tests)
+
+📖 **For detailed testing documentation, examples, and guidelines, see [tests/README.md](tests/README.md)**
 
 ## License
 
