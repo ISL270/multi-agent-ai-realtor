@@ -1,12 +1,12 @@
 # AI Real Estate Assistant
 
-<div align="left">
-  <table style="border: none; border-collapse: collapse;">
+<div align="center">
+  <table>
     <tr>
-      <td style="border: none; padding: 0; vertical-align: top;">
+      <td>
         <img src="ai_realtor_logo.png" alt="AI Realtor Logo" width="150" height="150" style="object-fit: cover;">
       </td>
-      <td style="border: none; padding-left: 20px; vertical-align: top;">
+      <td>
         <div>
           <img src="https://img.shields.io/badge/tests-86%20passing-brightgreen.svg" alt="Tests">
           <img src="https://img.shields.io/badge/coverage-83%25-brightgreen.svg" alt="Coverage">
