@@ -80,7 +80,7 @@ class TestParsePropertySearchQueryCustom:
         assert filters.amenities == ["pool"]
 
         # Verify LLM was called correctly
-        mock_init_chat_model.assert_called_once_with("openai:gpt-4o", temperature=0)
+        mock_init_chat_model.assert_called_once_with("openai:gpt-4.1", temperature=0)
         mock_llm.with_structured_output.assert_called_once_with(PropertySearchFilters)
         mock_structured_llm.invoke.assert_called_once()
 

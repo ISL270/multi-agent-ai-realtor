@@ -33,7 +33,7 @@ def parse_property_search_query(
         "If a field is missing, omit it from the output."
     )
     try:
-        llm = init_chat_model("openai:gpt-4o", temperature=0)
+        llm = init_chat_model("openai:gpt-4.1", temperature=0)
         structured_llm = llm.with_structured_output(PropertySearchFilters)
 
         filters = structured_llm.invoke(

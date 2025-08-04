@@ -66,6 +66,11 @@ pytest tests/unit/test_search_properties.py -v
 pytest tests/integration/test_property_search_flow_integration.py -v
 ```
 
+### Run Tests with Coverage Report
+```bash
+pytest tests/unit/ --cov=src --cov-report=term-missing
+```
+
 ## Testing Infrastructure
 
 - **Global Mocking**: Supabase client, Google Calendar API, and OpenAI LLM calls properly mocked in `conftest.py`
@@ -129,6 +134,7 @@ class TestYourWorkflowIntegration:
 ## Dependencies
 
 - `pytest` - Test framework
+- `pytest-cov` - Coverage reporting
 - `langchain-tests` - LangChain standard tests
 - `unittest.mock` - Built-in mocking utilities
 - Standard Python testing libraries
