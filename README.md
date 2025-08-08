@@ -57,9 +57,13 @@ Before running this project, make sure you have:
    cd multi-agent-ai-realtor
    ```
 
-2. **Install Python dependencies:**
+2. **Install Python dependencies with uv (no pip):**
    ```bash
-   pip install -e .
+   # One-time (install uv)
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+
+   # Install the project and dependencies (creates .venv automatically)
+   uv sync
    ```
 
 3. **Install frontend dependencies:**
@@ -88,8 +92,13 @@ Before running this project, make sure you have:
 6. **Run the application:**
    ```bash
    # From the project root directory
-   langgraph dev
+   uv run langgraph dev
    ```
+
+7. **Access the UI:**
+   Open [Agent Chat](https://agentchat.vercel.app/?apiUrl=http://localhost:2024&assistantId=agent) in your browser to interact with the AI agents and see the rendered property carousel UI.
+   
+   **Note:** The property carousel and other UI components will only render in Agent Chat, not in the LangGraph Studio interface.
 
 ## Usage Examples
 
@@ -173,19 +182,19 @@ The project includes comprehensive testing for all LangGraph tools with **86 tes
 ### **Run Tests:**
 ```bash
 # Run all tests (unit + integration)
-pytest tests/ -v
+uv run pytest tests/ -v
 
 # Run only unit tests
-pytest tests/unit/ -v
+uv run pytest tests/unit/ -v
 
 # Run only integration tests
-pytest tests/integration/ -v
+uv run pytest tests/integration/ -v
 
 # Run tests for a specific tool
-pytest tests/unit/test_search_properties.py -v
+uv run pytest tests/unit/test_search_properties.py -v
 
 # Run tests with coverage report
-pytest tests/unit/ --cov=src --cov-report=term-missing
+uv run pytest tests/unit/ --cov=src --cov-report=term-missing
 ```
 
 ### **Test Structure:**
