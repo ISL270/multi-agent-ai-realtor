@@ -1,10 +1,11 @@
 from typing import Annotated
 
 from langchain.chat_models import init_chat_model
-from langchain.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
-from langchain_core.tools import InjectedToolCallId
+from langchain_core.tools import InjectedToolCallId, tool
 from langgraph.types import Command
+
+from src.utils.llm_config import get_model_id
 
 from .property_search_filters import PropertySearchFilters
 
@@ -33,7 +34,7 @@ def parse_property_search_query(
         "If a field is missing, omit it from the output."
     )
     try:
-        llm = init_chat_model("openai:gpt-4.1", temperature=0)
+        llm = init_chat_model(get_model_id(use_mini=False), temperature=0)
         structured_llm = llm.with_structured_output(PropertySearchFilters)
 
         filters = structured_llm.invoke(

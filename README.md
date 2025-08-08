@@ -16,7 +16,7 @@
           <img src="https://img.shields.io/badge/LangSmith-🔍-blue.svg" alt="LangSmith">
           <img src="https://img.shields.io/badge/LangMem-🧠-purple.svg" alt="LangMem">
           <br><br>
-          <img src="https://img.shields.io/badge/OpenAI-GPT--4.1-412991.svg" alt="OpenAI">
+          <img src="https://img.shields.io/badge/OpenAI-GPT--5-412991.svg" alt="OpenAI">
           <img src="https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white" alt="Supabase">
           <img src="https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black" alt="React">
           <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
@@ -27,7 +27,7 @@
   </table>
 </div>
 
-A multi-agent real estate AI assistant built using **LangChain**, **LangGraph**, **LangSmith** for observability, and **LangMem** for persistence. Powered by OpenAI’s **GPT-4.1**, the system includes a **Property Finder agent** that parses natural language requests and queries a **Supabase** backend via RPC, and **Calendar Manager agent** responsible for scheduling viewings. Search results are displayed using **Generative UI** in a clean, in-chat interface built with **React** and **Tailwind CSS**.
+A multi-agent real estate AI assistant built using **LangChain**, **LangGraph**, **LangSmith** for observability, and **LangMem** for persistence. Powered by OpenAI's **GPT-5**, the system includes a **Property Finder agent** that parses natural language requests and queries a **Supabase** backend via RPC, and **Calendar Manager agent** responsible for scheduling viewings. Search results are displayed using **Generative UI** in a clean, in-chat interface built with **React** and **Tailwind CSS**.
 
 ## Features
 
@@ -77,17 +77,19 @@ Before running this project, make sure you have:
    npm run dev
    ```
 
-5. **Configure environment variables:**
-   ```bash
-   # Copy the example file and update it with your actual API keys
-   cp .env.example .env
-   ```
+5. **Configure Environment Variables**
 
-   Required environment variables:
-   - `OPENAI_API_KEY`: Your OpenAI API key
-   - `SUPABASE_URL`: Your Supabase project URL
-   - `SUPABASE_KEY`: Your Supabase anon key
-   - `LANGSMITH_API_KEY`: (Optional) Your LangSmith API key for tracing
+Copy `.env.example` to `.env` and fill in your actual API keys:
+
+```bash
+cp .env.example .env
+```
+
+Required variables:
+- `OPENAI_API_KEY`: Your OpenAI API key
+- `SUPABASE_URL`: Your Supabase project URL  
+- `SUPABASE_KEY`: Your Supabase anon key
+- `LANGSMITH_API_KEY`: Your LangSmith API key (optional, for tracing)
 
 6. **Run the application:**
    ```bash

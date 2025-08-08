@@ -4,10 +4,9 @@ from langgraph_supervisor import create_supervisor
 from langgraph_supervisor.handoff import create_forward_message_tool
 from langmem import create_manage_memory_tool, create_search_memory_tool
 
-from agents.calendar_manager.calendar_manager import (
-    calendar_manager,
-)
-from agents.property_finder.property_finder_agent import property_finder_agent
+from src.agents.calendar_manager.calendar_manager import calendar_manager
+from src.agents.property_finder.property_finder_agent import property_finder_agent
+from src.utils.llm_config import get_model_id
 
 from .app_state import AppState
 from .tools.render_property_carousel import render_property_carousel
@@ -21,7 +20,7 @@ def create_ai_realtor() -> StateGraph:
     return create_supervisor(
         supervisor_name="supervisor",
         state_schema=AppState,
-        model=ChatOpenAI(model="gpt-4.1-mini"),
+        model=ChatOpenAI(model=get_model_id(with_prefix=False)),
         agents=[
             property_finder_agent,
             calendar_manager,

@@ -8,6 +8,7 @@ from agents.calendar_manager.tools.find_available_slots import (
 from agents.calendar_manager.tools.schedule_viewing import (
     schedule_viewing,
 )
+from src.utils.llm_config import get_model_id
 
 tools = [find_available_slots, schedule_viewing]
 
@@ -44,7 +45,7 @@ Your primary responsibilities are:
 """
 
 calendar_manager = create_react_agent(
-    model="openai:gpt-4.1-mini",
+    model=get_model_id(),
     tools=tools,
     prompt=system_message,
     name="calendar_manager",
