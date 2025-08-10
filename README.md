@@ -8,19 +8,19 @@
       </td>
       <td>
         <div>
-          <img src="https://img.shields.io/badge/tests-86%20passing-brightgreen.svg" alt="Tests">
-          <img src="https://img.shields.io/badge/coverage-83%25-brightgreen.svg" alt="Coverage">
-          <br><br>
           <img src="https://img.shields.io/badge/LangChain-🦜-green.svg" alt="LangChain">
           <img src="https://img.shields.io/badge/LangGraph-🕸️-orange.svg" alt="LangGraph">
           <img src="https://img.shields.io/badge/LangSmith-🔍-blue.svg" alt="LangSmith">
           <img src="https://img.shields.io/badge/LangMem-🧠-purple.svg" alt="LangMem">
-          <br><br>
           <img src="https://img.shields.io/badge/OpenAI-GPT--5-412991.svg" alt="OpenAI">
+          <br><br>
           <img src="https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white" alt="Supabase">
           <img src="https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black" alt="React">
           <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
           <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
+          <br><br>
+          <img src="https://img.shields.io/badge/tests-86%20passing-brightgreen.svg" alt="Tests">
+          <img src="https://img.shields.io/badge/coverage-83%25-brightgreen.svg" alt="Coverage">
         </div>
       </td>
     </tr>
