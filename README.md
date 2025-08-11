@@ -4,7 +4,7 @@
   <table>
     <tr>
       <td>
-        <img src="ai_realtor_logo.png" alt="AI Realtor Logo" width="150" height="150" style="object-fit: cover;">
+        <img src="assets/ai_realtor_logo.png" alt="AI Realtor Logo" width="150" height="150" style="object-fit: cover;">
       </td>
       <td>
         <div>
@@ -28,6 +28,8 @@
 </div>
 
 A multi-agent real estate AI assistant built using **LangChain**, **LangGraph**, **LangSmith** for observability, and **LangMem** for persistence. Powered by OpenAI's **GPT-5**, the system includes a **Property Finder agent** that parses natural language requests and queries a **Supabase** backend via RPC, and **Calendar Manager agent** responsible for scheduling viewings. Search results are displayed using **Generative UI** in a clean, in-chat interface built with **React** and **Tailwind CSS**.
+
+<img src="assets/ai_realtor_demo.png" alt="AI Realtor Demo" style="object-fit: cover;">
 
 ## Features
 
